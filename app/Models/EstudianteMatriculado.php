@@ -4,34 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EstudianteMatriculado  extends Model
+class EstudianteMatriculado extends Model
 {
-    protected $fillable = ['numeroCiclo', 'ano', 'numeroGrupo', 'abierto', 'curso_id'];
+    protected $table = 'estudiante_matriculados';
+
+    protected $fillable = ['grupo_id', 'estudiante_id', 'nota'];
 
     protected $casts = [
-        'abierto' => 'boolean',
+        'nota' => 'float',
     ];
 
-    public function curso()
+    public function grupo()
     {
-        return $this->belongsTo(Curso::class);
+        return $this->belongsTo(Grupo::class);
     }
 
-    public function docentes()
+    public function estudiante()
     {
-        return $this->belongsToMany(Docente::class, 'docente_grupo')->withTimestamps();
-    }
-
-    
-    public function estudiantes()
-    {
-        return $this->belongsToMany(Estudiante::class, 'estudiante_matriculados')
-                    ->withPivot('nota')
-                    ->withTimestamps();
-    }
-
-    public function matriculas()
-    {
-        return $this->hasMany(EstudianteMatriculado::class);
+        return $this->belongsTo(Estudiante::class);
     }
 }
