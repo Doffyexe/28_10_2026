@@ -1,18 +1,16 @@
-    <?php
+<?php
 
-    namespace Tests\Unit;
-    use App\Models\Curso;
-    use App\Models\Docente;
-    use App\Models\Estudiante;
-    use App\Models\EstudianteMatriculado;
-    use App\Models\Grupo;
-    use Illuminate\Database\Eloquent\Collection;
-    use Tests\TestCase;
+namespace Tests\Unit;
 
-    use PHPUnit\Framework\TestCase;
+use App\Models\Curso;
+use App\Models\Docente;
+use App\Models\Estudiante;
+use App\Models\EstudianteMatriculado;
+use App\Models\Grupo;
+use Illuminate\Database\Eloquent\Collection;
+use Tests\TestCase;
 
-    class GrupoTest extends TestCase
-    {
+    class GrupoTest extends TestCase{
         private Grupo $grupo;
 
         protected function setUp(): void
