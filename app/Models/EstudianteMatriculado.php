@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Grupo extends Model
+class EstudianteMatriculado  extends Model
 {
     protected $fillable = ['numeroCiclo', 'ano', 'numeroGrupo', 'abierto', 'curso_id'];
 
@@ -17,7 +17,6 @@ class Grupo extends Model
         return $this->belongsTo(Curso::class);
     }
 
-   
     public function docentes()
     {
         return $this->belongsToMany(Docente::class, 'docente_grupo')->withTimestamps();
