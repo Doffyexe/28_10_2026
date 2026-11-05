@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Docente extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['codEmpleado', 'nombreEmpleado', 'apellidosEmpleado'];
 
-   
     public function grupos()
     {
         return $this->belongsToMany(Grupo::class, 'docente_grupo')->withTimestamps();
