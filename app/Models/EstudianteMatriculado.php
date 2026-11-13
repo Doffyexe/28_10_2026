@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class EstudianteMatriculado extends Model
+class EstudianteMatriculado extends Pivot
 {
-    protected $table = 'estudiante_matriculados';
+    protected $table = 'estudiantes_matriculados';
+
+    public $incrementing = true;
 
     protected $fillable = ['grupo_id', 'estudiante_id', 'nota'];
 

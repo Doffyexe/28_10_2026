@@ -3,14 +3,21 @@
 namespace App\Models;
 
 use DomainException;
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Grupo extends Model
 {
+    use HasFactory;
+
     public const MIN_DOCENTES = 1;
     public const MAX_DOCENTES = 2;
 
     public const MIN_ESTUDIANTES = 15;
+
+    public const NOTA_MINIMA = 0;
+    public const NOTA_MAXIMA = 10;
 
     protected $fillable = ['numeroCiclo', 'ano', 'numeroGrupo', 'abierto', 'curso_id'];
 
@@ -28,12 +35,13 @@ class Grupo extends Model
 
     public function docentes()
     {
-        return $this->belongsToMany(Docente::class, 'docente_grupo')->withTimestamps();
+        return $this->belongsToMany(Docente::class, 'grupo_docente')->withTimestamps();
     }
 
     public function estudiantes()
     {
-        return $this->belongsToMany(Estudiante::class, 'estudiante_matriculados')
+        return $this->belongsToMany(Estudiante::class, 'estudiantes_matriculados')
+                    ->using(EstudianteMatriculado::class)
                     ->withPivot('nota')
                     ->withTimestamps();
     }
@@ -87,5 +95,26 @@ class Grupo extends Model
 
         $this->abierto = true;
         $this->save();
+    }
+
+    /**
+     *
+     * @throws InvalidArgumentException si la nota está fuera del rango 0–10
+     * @throws DomainException si el estudiante no está matriculado en el grupo
+     */
+    public function registrarNota(Estudiante $estudiante, float $nota): void
+    {
+        if ($nota < self::NOTA_MINIMA || $nota > self::NOTA_MAXIMA) {
+            throw new InvalidArgumentException('La nota debe estar entre ' . self::NOTA_MINIMA
+                . ' y ' . self::NOTA_MAXIMA . '.');
+        }
+
+        $actualizados = $this->estudiantes()->updateExistingPivot($estudiante->id, ['nota' => $nota]);
+
+        if ($actualizados === 0) {
+            throw new DomainException('El estudiante ' . $estudiante->carne . ' no está matriculado en este grupo.');
+        }
+
+        $this->unsetRelation('estudiantes');
     }
 }

@@ -13,7 +13,7 @@ class Docente extends Model
 
     public function grupos()
     {
-        return $this->belongsToMany(Grupo::class, 'docente_grupo')->withTimestamps();
+        return $this->belongsToMany(Grupo::class, 'grupo_docente')->withTimestamps();
     }
 
     
